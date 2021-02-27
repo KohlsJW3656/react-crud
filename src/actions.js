@@ -1,5 +1,5 @@
 export const Action = Object.freeze({
-  LoadStudents: 'LoadStudents',
+  FinishLoadingStudents: 'FinishLoadingStudents',
   FinishAddingStudent: 'FinishAddingStudent',
   FinishDeletingStudent: 'FinishDeletingStudent',
   FinishEditingStudent: 'FinishEditingStudent',
@@ -17,13 +17,6 @@ function checkForErrors(response) {
 
 /*********************************************/
 
-export function loadStudents(students) {
-  return {
-    type: Action.LoadStudents,
-    payload: students,
-  };
-}
-
 export function getStudents() {
   return dispatch => {
     fetch(`${host}/students`)
@@ -31,21 +24,21 @@ export function getStudents() {
       .then(response => response.json())
       .then(data => {
         if (data.ok) {
-          dispatch(loadStudents(data.students));
+          dispatch(finishLoadingStudents(data.students));
         }
       })
       .catch(e => console.error(e));
   };
 }
 
-/*********************************************/
-
-export function finishAddingStudent(student) {
+export function finishLoadingStudents(students) {
   return {
-    type: Action.FinishAddingStudent,
-    payload: student,
+    type: Action.FinishLoadingStudents,
+    payload: students,
   };
 }
+
+/*********************************************/
 
 export function startAddingStudent(name, email, major) {
   const student = {name, email, major};
@@ -72,14 +65,14 @@ export function startAddingStudent(name, email, major) {
   };
 }
 
-/*********************************************/
-
-export function finishEditingStudent(student) {
+export function finishAddingStudent(student) {
   return {
-    type: Action.FinishEditingStudent,
+    type: Action.FinishAddingStudent,
     payload: student,
   };
 }
+
+/*********************************************/
 
 export function startEditingStudent(student) {
   const options = {
@@ -104,14 +97,15 @@ export function startEditingStudent(student) {
   };
 }
 
-/*********************************************/
-
-export function finishDeletingStudent(student) {
+export function finishEditingStudent(student) {
   return {
-    type: Action.FinishDeletingStudent,
+    type: Action.FinishEditingStudent,
     payload: student,
   };
 }
+
+
+/*********************************************/
 
 export function startDeletingStudent(student) {
   const requestDelete = {
@@ -129,5 +123,12 @@ export function startDeletingStudent(student) {
       }
     })
     .catch(e => console.error(e));
+  };
+}
+
+export function finishDeletingStudent(student) {
+  return {
+    type: Action.FinishDeletingStudent,
+    payload: student,
   };
 }
